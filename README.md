@@ -6,15 +6,15 @@
 </div>
 
 ## Installation
-Installing the program is very easy. Download your preffered native OS Tale:
-[ToDoList-Windows](https://github.com/Itsmemonzu/Tale/releases/download/v0.3/tale-win.zip),
+Installing the program is very easy. Download your preffered native OS To Do List:
+[ToDoList-Windows](https://github.com/Itsmemonzu/ToDoList/releases/download/0.1/main.exe),
 
-After downloading the .zip file, extract it and there you have it! The app is now installed. 
+There you have it! The app is now installed. 
 Please note: If your OS is not listed above, you will have to build the program your self by downloading the source code.
 <br>
 
 ## Building
-This program is dependant on [Fluent Command Line Parser](https://github.com/fclp/fluent-command-line-parser). To build the program, you need to use Pyinstaller or a compiler of your choice:
+This program is dependant on [Rich](https://github.com/Textualize/rich?tab=readme-ov-file). To build the program, you need to use Pyinstaller or a compiler of your choice:
 ```
 pip install pyinstaller
 ```
