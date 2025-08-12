@@ -1,0 +1,10 @@
+[project]
+name = "todolist"
+version = "0.1.0"
+description = "A To Do List for your terminal."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["rich>=14.1.0"]
+
+[dependency-groups]
+dev = ["pyinstaller>=6.15.0"]
