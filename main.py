@@ -20,11 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE."""
 
-import sys
-import emoji
 import re
 from rich import print
-from rich.console import Console
 # Menu
 works = []
 quit = False
@@ -72,16 +69,17 @@ while not quit:
 
                 print("[white]Select the work you want to mark as completed:[/]")
                 for work in works:
-                    print(f"{number}. {work}") 
+                    print(f"{number}. {work}")
                     number += 1
                 # Input for removing work
                 print("")
+                workDel = 0
                 try:
                     workDel = int(input("= "))-1
                 except:
                     print("")
                     print("[red]You must input a correct number![/]")
-                
+
                 # Error: Work is already marked as completed
                 if not workDel > len(works)-1 and workDel >= 0 and "✅" in works[workDel]:
                     print("")
@@ -89,7 +87,7 @@ while not quit:
                 # Marking work as completed
                 elif not workDel > len(works)-1 and workDel >= 0 and not "✅" in works[workDel]:
                     workDel = int(workDel)
-                    
+
                     works[workDel] = re.sub(r'❌ ', '✅ ', works[workDel])
                     print("")
                     print(f"'{re.sub(r'✅ ', '', works[workDel])}' [green]has been marked as complete![/] ✅")
@@ -106,16 +104,17 @@ while not quit:
 
                 print("[white]Select the work you want to remove:[/]")
                 for work in works:
-                    print(f"{number}. {work}") 
+                    print(f"{number}. {work}")
                     number += 1
                 # Input for deleting work
                 print("")
+                workDel = 0
                 try:
                     workDel = int(input("= "))-1
                 except:
                     print("")
                     print("[red]You must input a correct number![/]")
-                
+
                 if not workDel > len(works)-1 and workDel >= 0:
                     workDel = int(workDel)
                     if "❌" in works[workDel]:
@@ -131,17 +130,12 @@ while not quit:
         if userInput == "4":
             if works:
                 number = 1
-                
+
                 print("")
                 print("[white]List of works:[/]")
                 for work in works:
-                    print(f"{number}. {work}") 
+                    print(f"{number}. {work}")
                     number += 1
             else:
                 print("")
                 print("[red]There are no works to list![/]")
-
-
-                
-
-        
