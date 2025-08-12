@@ -1,7 +1,8 @@
 import sys
 import emoji
 import re
-
+import colorama
+from colorama import Fore, Back, Style
 works = []
 quit = False
 
@@ -11,14 +12,15 @@ while not quit:
         #Functions
         def start_menu():
             print("")
-            print("--To Do List--")
-            print("Select an option:")
-            print("1. Add work")
-            print("2. Mark work as completed")
-            print("3. Remove work")
-            print("4. List of works")
-            print("5. Exit")
+            print(f"{Fore.CYAN}--To Do List--")
+            print(f"{Fore.WHITE}Select an option:")
+            print(f"{Fore.GREEN}1. {Fore.YELLOW}Add work")
+            print(f"{Fore.GREEN}2. {Fore.YELLOW}Mark work as completed")
+            print(f"{Fore.GREEN}3. {Fore.YELLOW}Remove work")
+            print(f"{Fore.GREEN}4. {Fore.YELLOW}List of works")
+            print(f"{Fore.GREEN}5. {Fore.YELLOW}Exit")
             print("")
+            
         start_menu()
 
         userInput = input("= ")
