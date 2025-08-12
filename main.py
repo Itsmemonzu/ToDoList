@@ -1,8 +1,9 @@
 import sys
 import emoji
 import re
-import colorama
-from colorama import Fore, Back, Style
+from rich import print
+from rich.console import Console
+# Menu
 works = []
 quit = False
 
@@ -12,15 +13,16 @@ while not quit:
         #Functions
         def start_menu():
             print("")
-            print(f"{Fore.CYAN}--To Do List--")
-            print(f"{Fore.WHITE}Select an option:")
-            print(f"{Fore.GREEN}1. {Fore.YELLOW}Add work")
-            print(f"{Fore.GREEN}2. {Fore.YELLOW}Mark work as completed")
-            print(f"{Fore.GREEN}3. {Fore.YELLOW}Remove work")
-            print(f"{Fore.GREEN}4. {Fore.YELLOW}List of works")
-            print(f"{Fore.GREEN}5. {Fore.YELLOW}Exit")
+            print("[bold][cyan]--To Do List--[/][/]")
+            print("[bold][white]Select an option:[/][/]")
             print("")
-            
+            print("[green]1.[/] [yellow]Add work[/]")
+            print("[green]2.[/] [yellow]Mark work as completed[/]")
+            print("[green]3.[/] [yellow]Remove work[/]")
+            print("[green]4.[/] [yellow]List of works[/]")
+            print("[green]5.[/] [yellow]Exit[/]")
+            print("")
+
         start_menu()
 
         userInput = input("= ")
@@ -28,7 +30,7 @@ while not quit:
         # Exit
         if userInput == "5":
             print("")
-            print("Exiting the program.. Goodbye!")
+            print("[red]Exiting the program.. Goodbye![/]")
             break
         #Output
         if userInput == "1":
@@ -36,17 +38,17 @@ while not quit:
             work = input("Add the work: ")
             works.append("❌ "+work)
             print("")
-            print(f"'{work}' has been added to the list!")
+            print(f"'{work}' [white]has been added to the list![/]")
 
         if userInput == "2":
 
             print("")
             if not works:
-                print("No works to mark as completed.")
+                print("[red]No works to mark as completed.[/]")
             else:
                 number = 1
 
-                print("Select the work you want to mark as completed:")
+                print("[white]Select the work you want to mark as completed:[/]")
                 for work in works:
                     print(f"{number}. {work}") 
                     number += 1
@@ -56,31 +58,31 @@ while not quit:
                     workDel = int(input("= "))-1
                 except:
                     print("")
-                    print("You must input a correct number!")
+                    print("[red]You must input a correct number![/]")
                 
                 # Error: Work is already marked as completed
                 if not workDel > len(works)-1 and workDel >= 0 and "✅" in works[workDel]:
                     print("")
-                    print("The work is already marked as completed!")
+                    print("[red]The work is already marked as completed![/]")
                 # Marking work as completed
                 elif not workDel > len(works)-1 and workDel >= 0 and not "✅" in works[workDel]:
                     workDel = int(workDel)
                     
                     works[workDel] = re.sub(r'❌ ', '✅ ', works[workDel])
                     print("")
-                    print(f"'{re.sub(r'✅ ', '', works[workDel])}' has been marked as complete! ✅")
+                    print(f"'{re.sub(r'✅ ', '', works[workDel])}' [green]has been marked as complete![/] ✅")
                 else:
                     print("")
-                    print("Wrong input! Please try again.")
+                    print("[red]Wrong input! Please try again.[/]")
         if userInput == "3":
 
             print("")
             if not works:
-                print("No works to remove.")
+                print("[red]No works to remove.[/]")
             else:
                 number = 1
 
-                print("Select the work you want to remove:")
+                print("[white]Select the work you want to remove:[/]")
                 for work in works:
                     print(f"{number}. {work}") 
                     number += 1
@@ -90,7 +92,7 @@ while not quit:
                     workDel = int(input("= "))-1
                 except:
                     print("")
-                    print("You must input a correct number!")
+                    print("[red]You must input a correct number![/]")
                 
                 if not workDel > len(works)-1 and workDel >= 0:
                     workDel = int(workDel)
@@ -99,23 +101,23 @@ while not quit:
                     elif "✅" in works[workDel]:
                         works[workDel] = re.sub(r'✅ ', '', works[workDel])
                     print("")
-                    print(f"'{works[workDel]}' has been removed! 🗑️")
+                    print(f"'{works[workDel]}' [red]has been removed![/] 🗑️")
                     works.pop(workDel)
                 else:
                     print("")
-                    print("Wrong input! Please try again.")
+                    print("[red]Wrong input! Please try again.[/]")
         if userInput == "4":
             if works:
                 number = 1
                 
                 print("")
-                print("List of works:")
+                print("[white]List of works:[/]")
                 for work in works:
                     print(f"{number}. {work}") 
                     number += 1
             else:
                 print("")
-                print("There are no works to list!")
+                print("[red]There are no works to list![/]")
 
 
                 
