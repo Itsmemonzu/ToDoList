@@ -25,15 +25,12 @@ import emoji
 import re
 from rich import print
 from rich.console import Console
+import os
+import platform
 # Menu
 works = []
 quit = False
-
-while not quit:
-    #Quitting system
-    if not quit:
-        #Functions
-        def start_menu():
+def start_menu():
             print("")
             print("[bold][cyan]--To Do List--[/][/]")
             print("[bold][white]Select an option:[/][/]")
@@ -44,8 +41,21 @@ while not quit:
             print("[green]4.[/] [yellow]List of works[/]")
             print("[green]5.[/] [yellow]Exit[/]")
             print("")
+def clear_console():
+    # Detect the OS
+    current_os = platform.system()
 
-        start_menu()
+    if current_os == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+    #Print start_menu
+    start_menu()
+
+start_menu()
+while not quit:
+    #Quitting system
+    if not quit:
 
         userInput = input("= ")
 
@@ -140,7 +150,7 @@ while not quit:
             else:
                 print("")
                 print("[red]There are no works to list![/]")
-
+    clear_console()
 
                 
 
