@@ -18,18 +18,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE."""
 
-import re
 from rich import print
 import os
 import platform
 import time
 from tinydb import TinyDB, Query
+from tinydb.operations import set
 
 
+# Database query
+database = TinyDB('db.json')
+Work = Query()
 
-# Menu
-works = TinyDB('db.json')
-quit = False
 def start_menu():
             print("")
             print("[bold][cyan]--To Do List--[/][/]")
@@ -41,6 +41,7 @@ def start_menu():
             print("[green]4.[/] [yellow]List of works[/]")
             print("[green]5.[/] [yellow]Exit[/]")
             print("")
+
 def clear_console():
     # Detect the OS
     current_os = platform.system()
@@ -49,121 +50,132 @@ def clear_console():
         os.system("cls")
     else:
         os.system("clear")
-    #Print start_menu
+
     start_menu()
 
-start_menu()
-
 def run_function():
-    while not quit:
-        #Quitting system
-        if not quit:
-            userInput = input("= ")
+    start_menu()
 
-            # Exit
-            if userInput == "5":
-                print("")
-                print("[red]Exiting the program.. Goodbye![/]")
-                break
+    while True:
+        user_input = input("= ")
 
-            #Output
-            elif userInput == "1":
-                print("")
-                work = input("Add the work: ")
-                works.insert({'work': f'❌ '+work})
+        # Exit
+        if user_input == "5":
+            print("")
+            print("[red]Exiting the program.. Goodbye![/]")
+            break
+
+        # Output
+        elif user_input == "1":
+            print("")
+            work = input("Add the work: ").strip()
+
+            work_is_here = False
+            for item in database.all():
+                if item['work'].lower() == work.lower() and not work_is_here:
+                    work_is_here = True
+
+            if not work_is_here:
+                database.insert({'work': work, 'completed': False})
                 print("")
                 print(f"'{work}' [white]has been added to the list![/]")
+            else:
+                print("[red]This is already in the list![/]")
 
-            elif userInput == "2":
+        elif user_input == "2":
+            print("")
+
+            if not database:
+                print("[red]No works to mark as completed.[/]")
+            else:
+                number = 1
+
+                print("[white]Select the work you want to mark as completed:[/]")
+
+                # show all
+                for item in database:
+                    emoji = '❌' if item['completed'] == False else '✅'
+
+                    print(f"{number}. {emoji} {item['work']}")
+                    number += 1
+
+                # input for removing work
                 print("")
+                work_del = 0  # the work to complete
 
-                if not works:
-                    print("[red]No works to mark as completed.[/]")
-                else:
-                    number = 1
-
-                    print("[white]Select the work you want to mark as completed:[/]")
-                    for work in works:
-                        print(f"{number}. {work['work']}")
-                        number += 1
-                    # Input for removing work
+                # check for correct input
+                try:
+                    work_del = int(input("= "))-1
+                except:
                     print("")
-                    workDel = 0
-                    correctInput = False
-                    try:
-                        workDel = int(input("= "))-1
+                    print("[red]You must input a correct number![/]")
 
-                    except:
-                        print("")
-                        print("[red]You must input a correct number![/]")
+                # Error: Work is already marked as completed
+                if not work_del > len(database)-1 and work_del >= 0:
+                    item = database.all()[work_del]
 
-                    # Error: Work is already marked as completed
-                    if not workDel > len(works)-1 and workDel >= 0 and "✅" in works.all()[workDel]['work']:
+                    if item['completed']:
                         print("")
                         print("[red]The work is already marked as completed![/]")
-                    # Marking work as completed
-                    elif not workDel > len(works)-1 and workDel >= 0 and not "✅" in works.all()[workDel]['work']:
-                        workDel = int(workDel)
-                        
-                        works.update(set("❌" in works.all()[workDel]['work'])
-                        print("")
-                        print(f"'{re.sub(r'✅ ', '', works.all()[workDel]['work'])}' [green]has been marked as complete![/] ✅")
-                    else:
-                        print("")
-                        print("[red]Wrong input! Please try again.[/]")
 
-            elif userInput == "3":
+                    else:
+                        database.update(set('completed', True), Work.work == item['work'])
+                        print("")
+                        print("[green] Work marked as completed![/]")
+                else:
+                    print("")
+                    print("[red]Wrong input! Please try again.[/]")
+
+        elif user_input == "3":
+            print("")
+            if not database:
+                print("[red]No works to remove.[/]")
+            else:
+                number = 1
+
+                print("[white]Select the work you want to remove:[/]")
+                for item in database:
+                    emoji = '❌' if item['completed'] == False else '✅'
+                    print(f"{number}. {emoji} {item['work']}")
+                    number += 1
+
+                # Input for deleting work
+                print("")
+                work_del = 0
+                try:
+                    work_del = int(input("= "))-1
+                except:
+                    print("")
+                    print("[red]You must input a correct number![/]")
+
+                if not work_del > len(database)-1 and work_del >= 0:
+                    item = database.all()[work_del]
+                    print("")
+                    database.remove(Work.work == item['work'])
+                    print("[red]Work has been removed![/] 🗑️")
+                else:
+                    print("")
+                    print("[red]Wrong input! Please try again.[/]")
+
+        elif user_input == "4":
+            if database:
+                number = 1
 
                 print("")
-                if not works:
-                    print("[red]No works to remove.[/]")
-                else:
-                    number = 1
-
-                    print("[white]Select the work you want to remove:[/]")
-                    for work in works:
-                        print(f"{number}. {work}")
-                        number += 1
-                    # Input for deleting work
-                    print("")
-                    workDel = 0
-                    try:
-                        workDel = int(input("= "))-1
-                    except:
-                        print("")
-                        print("[red]You must input a correct number![/]")
-
-                    if not workDel > len(works)-1 and workDel >= 0:
-                        workDel = int(workDel)
-                        if "❌" in works[workDel]:
-                            works[workDel] = re.sub(r'❌ ', '', works[workDel])
-                        elif "✅" in works[workDel]:
-                            works[workDel] = re.sub(r'✅ ', '', works[workDel])
-                        print("")
-                        print(f"'{works[workDel]}' [red]has been removed![/] 🗑️")
-                        works.pop(workDel)
-                    else:
-                        print("")
-                        print("[red]Wrong input! Please try again.[/]")
-
-            elif userInput == "4":
-                if works:
-                    number = 1
-
-                    print("")
-                    print("[white]List of works:[/]")
-                    for work in works:
-                        print(f"{number}. {work}")
-                        number += 1
-                else:
-                    print("")
-                    print("[red]There are no works to list![/]")
-
+                print("[white]List of works:[/]")
+                for item in database:
+                    emoji = '❌' if item['completed'] == False else '✅'
+                    print(f"{number}. {emoji} {item['work']}")
+                    number += 1
             else:
-                print("[red]Invalid command![/]")
+                print("")
+                print("[red]There are no works to list![/]")
 
-            if userInput not in ["4"]:
-                clear_console()
+        else:
+            print("[red]Invalid command![/]")
+
+        if user_input not in ["4"]:
+            clear_console()
 
 # main running program
 try:

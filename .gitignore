@@ -201,3 +201,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# TinyDB
+db.json
+
+# macOS
+.DS_Store
