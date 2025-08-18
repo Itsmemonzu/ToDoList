@@ -23,9 +23,12 @@ from rich import print
 import os
 import platform
 import time
+from tinydb import TinyDB, Query
+
+
 
 # Menu
-works = []
+works = TinyDB('db.json')
 quit = False
 def start_menu():
             print("")
@@ -67,7 +70,7 @@ def run_function():
             elif userInput == "1":
                 print("")
                 work = input("Add the work: ")
-                works.append("❌ "+work)
+                works.insert({'work': f'❌ '+work})
                 print("")
                 print(f"'{work}' [white]has been added to the list![/]")
 
@@ -81,7 +84,7 @@ def run_function():
 
                     print("[white]Select the work you want to mark as completed:[/]")
                     for work in works:
-                        print(f"{number}. {work}")
+                        print(f"{number}. {work['work']}")
                         number += 1
                     # Input for removing work
                     print("")
@@ -95,16 +98,16 @@ def run_function():
                         print("[red]You must input a correct number![/]")
 
                     # Error: Work is already marked as completed
-                    if not workDel > len(works)-1 and workDel >= 0 and "✅" in works[workDel]:
+                    if not workDel > len(works)-1 and workDel >= 0 and "✅" in works.all()[workDel]['work']:
                         print("")
                         print("[red]The work is already marked as completed![/]")
                     # Marking work as completed
-                    elif not workDel > len(works)-1 and workDel >= 0 and not "✅" in works[workDel]:
+                    elif not workDel > len(works)-1 and workDel >= 0 and not "✅" in works.all()[workDel]['work']:
                         workDel = int(workDel)
-
-                        works[workDel] = re.sub(r'❌ ', '✅ ', works[workDel])
+                        
+                        works.update(set("❌" in works.all()[workDel]['work'])
                         print("")
-                        print(f"'{re.sub(r'✅ ', '', works[workDel])}' [green]has been marked as complete![/] ✅")
+                        print(f"'{re.sub(r'✅ ', '', works.all()[workDel]['work'])}' [green]has been marked as complete![/] ✅")
                     else:
                         print("")
                         print("[red]Wrong input! Please try again.[/]")
