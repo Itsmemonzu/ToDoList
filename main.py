@@ -45,7 +45,7 @@ def start_menu():
 def clear_console():
     # Detect the OS
     current_os = platform.system()
-    time.sleep(3)
+    time.sleep(1.5)
     if current_os == "Windows":
         os.system("cls")
     else:
@@ -162,7 +162,7 @@ def run_function():
                 number = 1
 
                 print("")
-                print("[white]List of works:[/]")
+                print("[bold][cyan]--List of works--[/][/]")
                 for item in database:
                     emoji = '❌' if item['completed'] == False else '✅'
                     print(f"{number}. {emoji} {item['work']}")
